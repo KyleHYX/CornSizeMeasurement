@@ -16,4 +16,10 @@
         android:name="com.example.cornsizemeasurement.ui.historicalData.HistoricalData"
         android:label="@string/title_historicalData"
         tools:layout="@layout/historical_data_fragment" />
+
+    <fragment
+        android:id="@+id/navigation_graph_display"
+        android:name="com.example.cornsizemeasurement.ui.graphDisplay.graph_display"
+        android:label="@string/title_graphDisplay"
+        tools:layout="@layout/graph_display_fragment" />
 </navigation>

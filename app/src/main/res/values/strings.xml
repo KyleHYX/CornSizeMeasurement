@@ -2,4 +2,6 @@
     <string name="app_name">CornSizeMeasurement</string>
     <string name="title_home">Home</string>
     <string name="title_historicalData">Historical Data</string>
+    <string name="title_graphDisplay"> Graph Display </string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
