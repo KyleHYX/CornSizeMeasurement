@@ -7,7 +7,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.room.Room
+import com.example.cornsizemeasurement.db.AppDatabase
+import com.example.cornsizemeasurement.db.AppDatabase.Companion.getInstance
+import com.example.cornsizemeasurement.db.CornSize
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +30,20 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        val db = getInstance(applicationContext)
+
+        println("--------------------------------")
+        GlobalScope.launch {
+            val cornSize : CornSize = CornSize(3,"2", "3")
+            db.cornSizeDao().insertAll(cornSize)
+
+            val data = db.cornSizeDao().getAll()
+
+            data?.forEach {
+                println(it)
+            }
+        }
 
     }
 }
