@@ -16,4 +16,7 @@ interface CornSizeDao {
 
     @Delete
     fun delete(cornSize: CornSize)
+
+    @Query("DELETE FROM cornSize")
+    fun deleteAll()
 }

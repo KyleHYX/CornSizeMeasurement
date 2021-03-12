@@ -11,5 +11,5 @@ class HistoricalDataViewModel : ViewModel() {
     }
     val text: LiveData<String> = _text
 
-    //val someList: MutableLiveData<ArrayList<Int>> = MutableLiveData(arrayListOf(1,2,3));
+    val someList: MutableLiveData<ArrayList<Int>> = MutableLiveData(arrayListOf(1,2,3));
 }

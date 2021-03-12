@@ -35,14 +35,12 @@ class MainActivity : AppCompatActivity() {
 
         println("--------------------------------")
         GlobalScope.launch {
-            val cornSize : CornSize = CornSize(3,"2", "3")
+            db.cornSizeDao().deleteAll()
+            val cornSize : CornSize = CornSize(5,"2", "3")
+
             db.cornSizeDao().insertAll(cornSize)
 
             val data = db.cornSizeDao().getAll()
-
-            data?.forEach {
-                println(it)
-            }
         }
 
     }
