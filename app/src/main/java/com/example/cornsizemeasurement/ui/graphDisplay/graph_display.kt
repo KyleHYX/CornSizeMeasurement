@@ -7,9 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.Dimension.DP
-import com.example.cornsizemeasurement.MainActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.cornsizemeasurement.R
+import com.example.cornsizemeasurement.ui.historicalData.CornSizeListAdapter
 import com.example.cornsizemeasurement.ui.historicalData.HistoricalDataViewModel
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
@@ -29,6 +30,12 @@ class graph_display : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         v =  inflater.inflate(R.layout.graph_display_fragment, container, false)
+
+        val recyclerView = v.findViewById<RecyclerView>(R.id.recyclerview)
+        val adapter = CornSizeListAdapter();
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this.context);
+
         return v;
     }
 

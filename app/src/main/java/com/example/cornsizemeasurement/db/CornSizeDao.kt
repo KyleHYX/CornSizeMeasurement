@@ -1,10 +1,8 @@
 package com.example.cornsizemeasurement.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CornSizeDao {
@@ -13,6 +11,12 @@ interface CornSizeDao {
 
     @Insert
     fun insertAll(vararg cornSizes: CornSize)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(cornSizes: CornSize)
+
+    @Query("SELECT * FROM cornSize ORDER BY cornId ASC")
+    fun getAllCornSize(): Flow<List<CornSize>>
 
     @Delete
     fun delete(cornSize: CornSize)

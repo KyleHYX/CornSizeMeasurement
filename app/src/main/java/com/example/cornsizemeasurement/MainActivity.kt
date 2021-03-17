@@ -1,26 +1,27 @@
 package com.example.cornsizemeasurement
 
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.room.Room
-import com.example.cornsizemeasurement.db.AppDatabase
-import com.example.cornsizemeasurement.db.AppDatabase.Companion.getInstance
 import com.example.cornsizemeasurement.db.CornSize
+import com.example.cornsizemeasurement.db.CornSizeDatabase.Companion.getInstance
+import com.example.cornsizemeasurement.ui.historicalData.HistoricalDataViewModel
+import com.example.cornsizemeasurement.ui.historicalData.HistoricalViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         //navBar
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
@@ -30,18 +31,5 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        val db = getInstance(applicationContext)
-
-        println("--------------------------------")
-        GlobalScope.launch {
-            db.cornSizeDao().deleteAll()
-            val cornSize : CornSize = CornSize(5,"2", "3")
-
-            db.cornSizeDao().insertAll(cornSize)
-
-            val data = db.cornSizeDao().getAll()
-        }
-
     }
 }
