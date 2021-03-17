@@ -6,14 +6,27 @@
     tools:context=".ui.historicalData.HistoricalData">
 
     <TextView
+        android:id="@+id/historicalDataTV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="This is historical data page" />
+        android:text="This is historical data page \n" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/recyclerview_item" />
+
+    <Button
+        android:id="@+id/showDataBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/historicalDataTV"
+
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="300dp"
+        android:text="Show data in DB"
+        android:layout_alignParentRight="true" />
 
 </FrameLayout>

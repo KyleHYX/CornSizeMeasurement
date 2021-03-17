@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CornSizeDao {
     @Query("SELECT * FROM cornSize")
-    fun getAll(): LiveData<List<CornSize>>
+    fun getAll(): List<CornSize>
 
     @Insert
     fun insertAll(vararg cornSizes: CornSize)

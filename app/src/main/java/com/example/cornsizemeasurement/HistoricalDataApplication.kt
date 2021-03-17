@@ -9,8 +9,7 @@ import kotlinx.coroutines.SupervisorJob
 
 
 class HistoricalDataApplication : Application() {
-    val applicationScope = CoroutineScope(SupervisorJob())
-    val database by lazy { CornSizeDatabase.getInstance(this, applicationScope) }
+    //val applicationScope = CoroutineScope(SupervisorJob())
+    val database by lazy { CornSizeDatabase.getInstance(this) }
     val repository by lazy { CornSizeRepository(database.cornSizeDao()) }
-
 }
