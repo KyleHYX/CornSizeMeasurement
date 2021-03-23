@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import java.util.*;
 
 class CornSizeRepository(private val cornSizeDao: CornSizeDao) {
-    val allCornSize: Flow<List<CornSize>> = cornSizeDao.getAllCornSize();
+    //val allCornSize: Flow<List<CornSize>> = cornSizeDao.getAllCornSize();
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread

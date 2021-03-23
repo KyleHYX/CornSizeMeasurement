@@ -1,19 +1,13 @@
 package com.example.cornsizemeasurement.ui.graphDisplay
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.cornsizemeasurement.R
-import com.example.cornsizemeasurement.db.CornSize
 import com.example.cornsizemeasurement.db.CornSizeDatabase
-import com.example.cornsizemeasurement.ui.historicalData.CornSizeListAdapter
-import com.example.cornsizemeasurement.ui.historicalData.HistoricalDataViewModel
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
@@ -25,7 +19,6 @@ class graph_display : Fragment() {
         fun newInstance() = graph_display()
     }
 
-    private lateinit var viewModel: HistoricalDataViewModel
     lateinit var v : View
     lateinit var db : CornSizeDatabase
 

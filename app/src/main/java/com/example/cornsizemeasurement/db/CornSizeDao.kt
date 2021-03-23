@@ -16,7 +16,7 @@ interface CornSizeDao {
     suspend fun insert(cornSizes: CornSize)
 
     @Query("SELECT * FROM cornSize ORDER BY cornId ASC")
-    fun getAllCornSize(): Flow<List<CornSize>>
+    fun getAllCornSize(): LiveData<List<CornSize>>
 
     @Delete
     fun delete(cornSize: CornSize)
