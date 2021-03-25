@@ -15,7 +15,9 @@ class HomeViewModel : ViewModel() {
         value = "home fragment"
     }
 
-    val sth = "hi"
-
     val text: LiveData<String> = _text
+
+    var selectedObs = MutableLiveData<String>().apply {
+        value = "No Corn Selected"
+    }
 }

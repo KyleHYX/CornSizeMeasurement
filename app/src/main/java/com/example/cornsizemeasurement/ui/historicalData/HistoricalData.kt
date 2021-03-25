@@ -23,6 +23,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 
 class HistoricalData : Fragment() {
     companion object {
@@ -55,7 +56,7 @@ class HistoricalData : Fragment() {
         var cornSizeList: List<CornSize> = emptyList()
         var selectedCornSize: CornSize
 
-        hda = HistoricalDataAdapter(cornSizeList)
+        hda = HistoricalDataAdapter(cornSizeList, ClickListener { position -> selectPos(position) })
         historicalDataRV.adapter = hda
         historicalDataRV.layoutManager = LinearLayoutManager(this.context)
 
@@ -69,14 +70,16 @@ class HistoricalData : Fragment() {
             db.cornSizeDao().insertAll(cornSize2)
             db.cornSizeDao().insertAll(cornSize3)
         }
+        var selectedData: TextView = v.findViewById(R.id.selectedData)
+        viewModel.selectedObs.observe(viewLifecycleOwner, Observer { cornSelected -> selectedData.text = cornSelected })
+        getFirst()
 
         val showDataBtn: Button = v.findViewById(R.id.showDataBtn)
-        showDataBtn.text = viewModel.sth
+        showDataBtn.text = "Show History"
 
         showDataBtn.setOnClickListener() {
             getData()
         }
-
     }
 
     fun getData() {
@@ -89,5 +92,30 @@ class HistoricalData : Fragment() {
                 }
             })
         }
+
+        getFirst()
+    }
+
+    fun getFirst() {
+        GlobalScope.launch {
+            var displayMsg: String = ""
+            allCornSize = db.cornSizeDao().getAll()
+
+            if(allCornSize != null && allCornSize.isNotEmpty()) {
+                var firstData: CornSize = allCornSize[0]
+                displayMsg += "Corn ID: " + firstData.cornId.toString() + "\n contains data: " + firstData.sizeData
+
+                activity?.runOnUiThread(java.lang.Runnable {
+                    viewModel.selectedObs.value = displayMsg
+                })
+            }
+        }
+    }
+
+    fun selectPos(position: Int) {
+        var selectedData: CornSize = allCornSize.get(position)
+        var displayMsg = "Corn ID: " + selectedData.cornId.toString() + "\n contains data: " + selectedData.sizeData
+
+        viewModel.selectedObs.value = displayMsg
     }
 }
