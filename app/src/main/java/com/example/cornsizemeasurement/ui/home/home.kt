@@ -38,8 +38,8 @@ class home : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
+        viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
         val statusBoardBtn: TextView = v.findViewById(R.id.statusBoard)
         val btIcon: ImageView = v.findViewById(R.id.bt)
         val btOnBtn: Button = v.findViewById(R.id.btOn)

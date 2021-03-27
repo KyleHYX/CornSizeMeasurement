@@ -48,13 +48,14 @@ class HistoricalData : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        //viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
+
 
         db = getInstance(requireContext().applicationContext)
 
         val historicalDataRV: RecyclerView = v.findViewById(R.id.cornSizeList)
         var cornSizeList: List<CornSize> = emptyList()
-        var selectedCornSize: CornSize
 
         hda = HistoricalDataAdapter(cornSizeList, ClickListener { position -> selectPos(position) })
         historicalDataRV.adapter = hda
@@ -71,8 +72,9 @@ class HistoricalData : Fragment() {
             db.cornSizeDao().insertAll(cornSize3)
         }
         var selectedData: TextView = v.findViewById(R.id.selectedData)
+        selectedData.text = viewModel.selectedObs.value
         viewModel.selectedObs.observe(viewLifecycleOwner, Observer { cornSelected -> selectedData.text = cornSelected })
-        getFirst()
+        //getFirst()
 
         val showDataBtn: Button = v.findViewById(R.id.showDataBtn)
         showDataBtn.text = "Show History"
@@ -93,7 +95,7 @@ class HistoricalData : Fragment() {
             })
         }
 
-        getFirst()
+        //getFirst()
     }
 
     fun getFirst() {

@@ -30,5 +30,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         var viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+
+        System.out.println(viewModel.selectedObs.value)
     }
 }
