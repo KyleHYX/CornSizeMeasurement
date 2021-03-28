@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below = "@+id/graphDataTV"
+        android:layout_marginTop = "20dp"
         android:text="Voltage/V" />
 
     <com.jjoe64.graphview.GraphView
