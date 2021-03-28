@@ -1,17 +1,14 @@
 package com.example.cornsizemeasurement.ui.historicalData
 
-import android.app.Application
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cornsizemeasurement.R
@@ -20,10 +17,7 @@ import com.example.cornsizemeasurement.db.CornSizeDatabase
 import com.example.cornsizemeasurement.db.CornSizeDatabase.Companion.getInstance
 import com.example.cornsizemeasurement.ui.home.HomeViewModel
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 
 class HistoricalData : Fragment() {
     companion object {
@@ -57,7 +51,15 @@ class HistoricalData : Fragment() {
         val historicalDataRV: RecyclerView = v.findViewById(R.id.cornSizeList)
         var cornSizeList: List<CornSize> = emptyList()
 
-        hda = HistoricalDataAdapter(cornSizeList, ClickListener { position -> selectPos(position) })
+        hda = HistoricalDataAdapter(cornSizeList, object : ClickListener {
+            override fun onSelectClicked(position: Int) {
+                selectPos(position)
+            }
+
+            override fun onDeleteClicked(position: Int) {
+                deletePos(position)
+            }
+        })
         historicalDataRV.adapter = hda
         historicalDataRV.layoutManager = LinearLayoutManager(this.context)
 
@@ -103,5 +105,21 @@ class HistoricalData : Fragment() {
 
         viewModel.selectedObs.value = displayMsg
         viewModel.selectedCorn.value = selectedData
+    }
+
+    fun deletePos(position: Int) {
+        GlobalScope.launch {
+            var deleteCorn = allCornSize[position]
+
+            db.cornSizeDao().delete(deleteCorn)
+
+            allCornSize = db.cornSizeDao().getAll()
+
+            activity?.runOnUiThread(java.lang.Runnable {
+                if(allCornSize != null) {
+                    hda.setData(allCornSize)
+                }
+            })
+        }
     }
 }
