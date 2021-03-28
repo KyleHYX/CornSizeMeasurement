@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.graphDisplay.graph_display">
 
     <TextView
+        android:id="@+id/graphDataTV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="This is the graph display fragement" />
+        android:layout_height="wrap_content"
+        android:text="No Corn Data selected" />
+
+    <TextView
+        android:id="@+id/yLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below = "@+id/graphDataTV"
+        android:text="Voltage/V" />
 
     <com.jjoe64.graphview.GraphView
+        android:id = "@+id/graph"
         android:layout_width = "match_parent"
-        android:layout_height = "200dip"
-        android:id = "@+id/graph"  />
+        android:layout_height = "300dp"
+        android:layout_below = "@+id/yLabel"/>
 
-</FrameLayout>
+</RelativeLayout>

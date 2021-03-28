@@ -20,4 +20,8 @@ class HomeViewModel : ViewModel() {
     var selectedObs = MutableLiveData<String>().apply {
         value = "No Corn Selected"
     }
+
+    var selectedCorn = MutableLiveData<CornSize>().apply {
+        value = CornSize(0,null,null)
+    }
 }

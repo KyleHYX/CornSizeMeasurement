@@ -5,14 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.cornsizemeasurement.R
+import com.example.cornsizemeasurement.db.CornSize
 import com.example.cornsizemeasurement.db.CornSizeDatabase
+import com.example.cornsizemeasurement.ui.home.HomeViewModel
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 
 class graph_display : Fragment() {
     companion object {
@@ -21,7 +27,9 @@ class graph_display : Fragment() {
 
     lateinit var v : View
     lateinit var db : CornSizeDatabase
-
+    private lateinit var viewModel: HomeViewModel
+    private lateinit var graph: GraphView
+    private lateinit var displayTV: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,52 +37,71 @@ class graph_display : Fragment() {
     ): View? {
         v =  inflater.inflate(R.layout.graph_display_fragment, container, false)
 
-        //val recyclerView = v.findViewById<RecyclerView>(R.id.recyclerview)
-        //val adapter = CornSizeListAdapter();
-        //recyclerView.adapter = adapter
-        //recyclerView.layoutManager = LinearLayoutManager(this.context);
-
         return v;
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         //viewModel = ViewModelProvider(this).get(HistoricalDataViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
 
-        //print(viewModel.someList)
+        viewModel.selectedCorn.observe(viewLifecycleOwner, Observer { cornSelected -> generateGraph(cornSelected) })
 
-        var graph: GraphView = v.findViewById(R.id.graph)
+
+        graph = v.findViewById(R.id.graph)
         graph.setVisibility(View.VISIBLE)
+        displayTV = v.findViewById(R.id.graphDataTV)
+        graph.getGridLabelRenderer().setHorizontalAxisTitle("Time/Hour")
 
-        db = CornSizeDatabase.getInstance(requireContext().applicationContext)
-        GlobalScope.launch {
-            var allCornSize = db.cornSizeDao().getAll()
-            var allVals = allCornSize
-            var first: String = " "
-            if(allVals != null) {
-                first= allVals[0].sizeData.toString()
+        graph.getGridLabelRenderer().setHumanRounding(true);
+        graph.getViewport().setYAxisBoundsManual(true)
+        graph.getViewport().setXAxisBoundsManual(true)
+    }
+
+    fun generateGraph(cornSize: CornSize) {
+        if(cornSize == null) {
+            Toast.makeText(activity, "select a corn first", Toast.LENGTH_LONG).show()
+        }
+
+        if(cornSize.sizeData == null) {
+            Toast.makeText(activity, "empty size data", Toast.LENGTH_LONG).show()
+        }
+        else {
+            var cornData: String = cornSize.sizeData
+            var dps: MutableList<Double> = ArrayList()
+            var stringArray = cornData.split(",")
+            var max: Double = 0.0
+
+            for(entry in stringArray) {
+                val entryVal = entry.toDouble()
+
+                if(entryVal > max)
+                    max = entryVal
+
+                dps.add(entryVal)
             }
 
-            var dps: MutableList<Int> = ArrayList()
-            var valArray = first.toCharArray()
-            for(entry in valArray) {
-                dps.add(entry.toInt())
-            }
             try {
-                val x= 0;
-                val points = arrayOf(DataPoint(0.toDouble(), dps[1].toDouble()), DataPoint(1.toDouble(), dps[0].toDouble()), DataPoint(2.toDouble(), dps[2].toDouble()));
-                var series: LineGraphSeries <DataPoint> = LineGraphSeries<DataPoint>(points)
+                val points: MutableList<DataPoint?> = ArrayList()
 
+                for(i in 0 until dps.size) {
+                    points.add(DataPoint(i.toDouble(), dps[i]))
+                }
+
+                var series: LineGraphSeries <DataPoint> = LineGraphSeries<DataPoint>(points.toTypedArray())
                 graph.addSeries(series)
+
+                graph.getViewport().setMinX(0.0)
+                graph.getViewport().setMaxX(dps.size.toDouble() - 1)
+                graph.getViewport().setMinY(0.0)
+                graph.getViewport().setMaxY(max)
+
+                displayTV.text = viewModel.selectedObs.value
             }
             catch (e: IllegalArgumentException){
                 Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }
         }
-    }
-
-    fun generateGraph(dataPoints: ArrayList<Integer>) {
-
     }
 
 }

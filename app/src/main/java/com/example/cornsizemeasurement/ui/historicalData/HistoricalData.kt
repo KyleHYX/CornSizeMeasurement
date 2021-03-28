@@ -63,14 +63,15 @@ class HistoricalData : Fragment() {
 
         GlobalScope.launch {
             db.cornSizeDao().deleteAll()
-            val cornSize1 : CornSize = CornSize(1,"2", "1,5,6")
-            val cornSize2 : CornSize = CornSize(2,"2", "1,7,9")
-            val cornSize3 : CornSize = CornSize(3,"2", "1,2,3")
+            val cornSize1 : CornSize = CornSize(1,"2", "0,1,5,6,8,10,13")
+            val cornSize2 : CornSize = CornSize(2,"2", "0,1,7,9,10,10,13")
+            val cornSize3 : CornSize = CornSize(3,"2", "0,1,2,3,4,5,7,9")
 
             db.cornSizeDao().insertAll(cornSize1)
             db.cornSizeDao().insertAll(cornSize2)
             db.cornSizeDao().insertAll(cornSize3)
         }
+
         var selectedData: TextView = v.findViewById(R.id.selectedData)
         selectedData.text = viewModel.selectedObs.value
         viewModel.selectedObs.observe(viewLifecycleOwner, Observer { cornSelected -> selectedData.text = cornSelected })
@@ -94,24 +95,6 @@ class HistoricalData : Fragment() {
                 }
             })
         }
-
-        //getFirst()
-    }
-
-    fun getFirst() {
-        GlobalScope.launch {
-            var displayMsg: String = ""
-            allCornSize = db.cornSizeDao().getAll()
-
-            if(allCornSize != null && allCornSize.isNotEmpty()) {
-                var firstData: CornSize = allCornSize[0]
-                displayMsg += "Corn ID: " + firstData.cornId.toString() + "\n contains data: " + firstData.sizeData
-
-                activity?.runOnUiThread(java.lang.Runnable {
-                    viewModel.selectedObs.value = displayMsg
-                })
-            }
-        }
     }
 
     fun selectPos(position: Int) {
@@ -119,5 +102,6 @@ class HistoricalData : Fragment() {
         var displayMsg = "Corn ID: " + selectedData.cornId.toString() + "\n contains data: " + selectedData.sizeData
 
         viewModel.selectedObs.value = displayMsg
+        viewModel.selectedCorn.value = selectedData
     }
 }
