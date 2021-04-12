@@ -82,7 +82,7 @@ class home : Fragment() {
 
         address = btAdapter.address
 
-        if(pairedDevices.size > 0) {
+        /*if(pairedDevices.size > 0) {
             for(device in pairedDevices) {
                 if(device.name == "Hongye’s MacBook Pro (2)") {
                     uuid = UUID.fromString(device.uuids[0].toString())
@@ -93,6 +93,7 @@ class home : Fragment() {
         }
 
         setBluetoothSocket()
+        */
 
         //bluetooth on
         btOnBtn.setOnClickListener {
@@ -147,7 +148,8 @@ class home : Fragment() {
 
         pbt = pairedBTAdapter(bluetoothDeviceList, object : ClickListener {
             override fun onConnectClicked(position: Int) {
-                connectDevice(position)
+                var selectedBTDevice: BluetoothDevice = pairedDevices.elementAt(position)
+                connectDevice(selectedBTDevice)
             }
 
             override fun onDisconnectClicked(position: Int) {
@@ -205,8 +207,12 @@ class home : Fragment() {
         }
     }
 
-    private fun connectDevice(position: Int) {
+    private fun connectDevice(selectedDevice: BluetoothDevice) {
+        uuid = UUID.fromString(selectedDevice.uuids[0].toString())
+        address = selectedDevice.address
+        Toast.makeText(v.context, address, Toast.LENGTH_LONG).show()
 
+        setBluetoothSocket()
     }
 
     private fun disconnectDevice(position: Int) {
