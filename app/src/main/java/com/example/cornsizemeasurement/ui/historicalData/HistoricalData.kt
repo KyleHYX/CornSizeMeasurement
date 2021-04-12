@@ -77,7 +77,6 @@ class HistoricalData : Fragment() {
         var selectedData: TextView = v.findViewById(R.id.selectedData)
         selectedData.text = viewModel.selectedObs.value
         viewModel.selectedObs.observe(viewLifecycleOwner, Observer { cornSelected -> selectedData.text = cornSelected })
-        //getFirst()
 
         val showDataBtn: Button = v.findViewById(R.id.showDataBtn)
         showDataBtn.text = "Show History"
