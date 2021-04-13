@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class CornSize(
-        @PrimaryKey val cornId: Int,
+        @PrimaryKey(autoGenerate = true) val cornId: Int,
         @ColumnInfo(name = "time_stamp") val timeStamp: String?,
         @ColumnInfo(name = "size_data") val sizeData: String?
 )

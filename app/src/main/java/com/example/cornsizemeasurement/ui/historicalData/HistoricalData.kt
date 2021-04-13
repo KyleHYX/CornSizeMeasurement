@@ -63,16 +63,16 @@ class HistoricalData : Fragment() {
         historicalDataRV.adapter = hda
         historicalDataRV.layoutManager = LinearLayoutManager(this.context)
 
+        /*
         GlobalScope.launch {
-            db.cornSizeDao().deleteAll()
-            val cornSize1 : CornSize = CornSize(1,"2", "0,1,5,6,8,10,13")
-            val cornSize2 : CornSize = CornSize(2,"2", "0,1,7,9,10,10,13")
-            val cornSize3 : CornSize = CornSize(3,"2", "0,1,2,3,4,5,7,9")
+            val cornSize1 : CornSize = CornSize(0,"2", "0,1,5,6,8,10,13")
+            val cornSize2 : CornSize = CornSize(0,"2", "0,1,7,9,10,10,13")
+            val cornSize3 : CornSize = CornSize(0,"2", "0,1,2,3,4,5,7,9")
 
             db.cornSizeDao().insertAll(cornSize1)
             db.cornSizeDao().insertAll(cornSize2)
             db.cornSizeDao().insertAll(cornSize3)
-        }
+        }*/
 
         var selectedData: TextView = v.findViewById(R.id.selectedData)
         selectedData.text = viewModel.selectedObs.value

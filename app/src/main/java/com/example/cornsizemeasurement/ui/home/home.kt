@@ -2,7 +2,9 @@ package com.example.cornsizemeasurement.ui.home
 
 import android.app.Activity
 import android.app.ProgressDialog
-import android.bluetooth.*
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothSocket
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +19,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cornsizemeasurement.R
+import com.example.cornsizemeasurement.db.CornSize
+import com.example.cornsizemeasurement.db.CornSizeDatabase
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.*
 
@@ -39,6 +45,8 @@ class home : Fragment() {
     lateinit var btAdapter: BluetoothAdapter
     lateinit var v : View
     lateinit var pbt: pairedBTAdapter
+    lateinit var receivedData: String
+    lateinit var db : CornSizeDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,7 +66,12 @@ class home : Fragment() {
         val btOffBtn: Button = v.findViewById(R.id.btOff)
         val discoverableBtn: Button = v.findViewById(R.id.discoverable)
         val pairedDeviceBtn: Button = v.findViewById(R.id.paired)
-        val sendON: Button = v.findViewById(R.id.sendON);
+        val sendON: Button = v.findViewById(R.id.sendON)
+        val receiveBTN: Button = v.findViewById(R.id.receiveBTN)
+        val saveBtn:Button = v.findViewById(R.id.saveBTN)
+
+        // db
+        db = CornSizeDatabase.getInstance(requireContext().applicationContext)
 
         //bluetooth adapter
         btAdapter = BluetoothAdapter.getDefaultAdapter()
@@ -78,22 +91,10 @@ class home : Fragment() {
             btIcon.setImageResource(R.drawable.ic_baseline_bluetooth_disabled_24)
         }
 
+        // set up device pair
         var pairedDevices = btAdapter.bondedDevices
 
         address = btAdapter.address
-
-        /*if(pairedDevices.size > 0) {
-            for(device in pairedDevices) {
-                if(device.name == "Hongye’s MacBook Pro (2)") {
-                    uuid = UUID.fromString(device.uuids[0].toString())
-                    address = device.address
-                    Toast.makeText(v.context, address, Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-
-        setBluetoothSocket()
-        */
 
         //bluetooth on
         btOnBtn.setOnClickListener {
@@ -125,15 +126,6 @@ class home : Fragment() {
 
         pairedDeviceBtn.setOnClickListener {
             if(btAdapter.isEnabled) {
-                /*
-                pairedDeviceTV.text = "Pair Devices"
-
-                val deviceList = btAdapter.bondedDevices
-                for(device in deviceList) {
-                    val deviceName = device.name
-                    val deviceAddress = device
-                    pairedDeviceTV.append("\nDevice: $deviceName, $device")
-                }*/
                 val deviceList = btAdapter.bondedDevices
                 showPairedList(ArrayList(deviceList));
             }
@@ -142,7 +134,7 @@ class home : Fragment() {
             }
         }
 
-        // recycle list of bluetooth devices
+        // recycle list for bluetooth devices
         val paired_bt_list: RecyclerView = v.findViewById(R.id.paired_bt_list)
         var bluetoothDeviceList: List<BluetoothDevice> = emptyList()
 
@@ -163,6 +155,14 @@ class home : Fragment() {
         // send ON signal
         sendON.setOnClickListener {
             sendMsg("ON")
+        }
+
+        receiveBTN.setOnClickListener {
+            receiveMsg()
+        }
+
+        saveBtn.setOnClickListener {
+            saveToDB(receivedData)
         }
     }
 
@@ -196,6 +196,25 @@ class home : Fragment() {
         }
     }
 
+    private fun receiveMsg() {
+        val buffer = ByteArray(256)
+        val bytes: Int
+        val msgReceived: TextView = v.findViewById(R.id.receivedMsg)
+        if(bluetoothSocket != null) {
+            try {
+                if(bluetoothSocket!!.inputStream != null) {
+                    bytes = bluetoothSocket!!.inputStream.read(buffer)
+                    val readMessage = String(buffer, 0, bytes)
+                    msgReceived.text = readMessage
+                    receivedData = readMessage
+                }
+            }
+            catch(e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     private fun setBluetoothSocket() {
         try {
             val device: BluetoothDevice = btAdapter.getRemoteDevice(address)
@@ -221,5 +240,12 @@ class home : Fragment() {
 
     private fun showPairedList(deviceList: List<BluetoothDevice>) {
         pbt.setData(deviceList);
+    }
+
+    private fun saveToDB(data: String) {
+        val newCornSize: CornSize = CornSize(0, "2", data)
+        GlobalScope.launch {
+            db.cornSizeDao().insert(newCornSize)
+        }
     }
 }

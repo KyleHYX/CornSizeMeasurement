@@ -71,8 +71,9 @@
         android:text="Paired Devices" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/wrapCard"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="250dp"
         android:layout_margin="16dp"
         android:layout_below="@+id/paired"
         android:layout_marginTop="10dp"
@@ -95,11 +96,50 @@
         android:id="@+id/sendON"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="164dp"
-        android:layout_marginRight="164dp"
-        android:layout_marginBottom="190dp"
+        android:layout_below="@+id/wrapCard"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="16dp"
         android:text="SEND" />
+
+    <Button
+        android:id="@+id/receiveBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/wrapCard"
+        android:layout_toRightOf="@id/sendON"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="10dp"
+        android:text="receive" />
+    <Button
+        android:id="@+id/saveBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/wrapCard"
+        android:layout_toRightOf="@+id/receiveBTN"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="10dp"
+        android:text="save" />
+
+    <TextView
+        android:id="@+id/receivedMsgTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sendON"
+        android:layout_marginTop="10dp"
+        android:text="Data received is: " />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/receivedMsgTitle"
+        android:layout_marginTop="12dp">
+
+        <TextView
+            android:id="@+id/receivedMsg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="msg" />
+
+    </ScrollView>
 </RelativeLayout>
