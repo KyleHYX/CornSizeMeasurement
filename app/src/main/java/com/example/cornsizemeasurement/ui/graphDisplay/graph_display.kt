@@ -30,6 +30,7 @@ class graph_display : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var graph: GraphView
     private lateinit var displayTV: TextView
+    val linearRelation = 453.6
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,7 +74,7 @@ class graph_display : Fragment() {
             var max: Double = 0.0
 
             for(entry in stringArray) {
-                val entryVal = entry.toDouble()
+                val entryVal = (entry.toDouble())/linearRelation
 
                 if(entryVal > max)
                     max = entryVal

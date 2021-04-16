@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_below = "@+id/graphDataTV"
         android:layout_marginTop = "20dp"
-        android:text="Growth/0.1mm" />
+        android:text="Growth/1mm" />
 
     <com.jjoe64.graphview.GraphView
         android:id = "@+id/graph"

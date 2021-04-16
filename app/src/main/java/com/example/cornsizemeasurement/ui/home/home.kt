@@ -197,7 +197,7 @@ class home : Fragment() {
     }
 
     private fun receiveMsg() {
-        val buffer = ByteArray(256)
+        val buffer = ByteArray(1024)
         val bytes: Int
         val msgReceived: TextView = v.findViewById(R.id.receivedMsg)
         if(bluetoothSocket != null) {
