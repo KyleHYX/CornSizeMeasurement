@@ -8,7 +8,12 @@
 
     <item
         android:id="@+id/navigation_historicalData"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_baseline_toc_24"
         android:title="@string/title_historicalData" />
+
+    <item
+        android:id="@+id/navigation_graph_display"
+        android:icon="@drawable/ic_baseline_show_chart_24"
+        android:title="@string/title_graphDisplay" />
 
 </menu>
